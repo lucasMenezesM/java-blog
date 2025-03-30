@@ -1,9 +1,13 @@
 package com.nexusBlog.NexusBlog.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,15 +49,19 @@ public class PostServiceTest {
     void setUp() {
       user = new User();
       user.setId(1L);
-      user.setName("Lucas");
+      user.setFirstName("Lucas");
 
       post = new Post(user, null, "First Post", "This is the first post for test");
       post.setId(1L);
 
-      // Permite que os mocks sejam configurados sem gerar erros de "unnecessary stubbing"
       Mockito.lenient().when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
       Mockito.lenient().when(postRepository.save(Mockito.any(Post.class))).thenReturn(post);
       Mockito.lenient().when(postRepository.findById(1L)).thenReturn(Optional.of(post));
+      Mockito.lenient().when(postRepository.findByTitleContainingIgnoreCase(Mockito.anyString()))
+      .thenReturn(List.of(post));
+      // Mockito.lenient().when(postRepository.findByUser_NameContainingIgnoreCase(Mockito.anyString()))
+      // .thenReturn(List.of(post));
+      
     }
 
     @Test
@@ -93,5 +101,47 @@ public class PostServiceTest {
 
       // 🔍 Verificando se o método correto foi chamado
       Mockito.verify(postRepository, Mockito.times(1)).delete(post);
+    }
+
+    @Test
+    public void testFindByTitleContainingIgnoreCase() {
+        List<Post> posts = postRepository.findByTitleContainingIgnoreCase("first");
+
+        assertNotNull(posts);
+        assertFalse(posts.isEmpty());
+        assertTrue(posts.get(0).getTitle().toLowerCase().contains("first"));
+    }
+
+    // @Test
+    // public void testFindByUser_NameContainingIgnoreCase() {
+    //   List<Post> posts = postRepository.findByUser_NameContainingIgnoreCase("Lucas");
+
+    //   assertNotNull(posts);
+    //   assertFalse(posts.isEmpty());
+    //   assertTrue(posts.get(0).getUser().getFirstName().toLowerCase().contains("lucas"));
+    // }
+
+    @Test
+    public void testFindByContentContainingIgnoreCase() {
+      Mockito.lenient().when(postRepository.findByBodyContainingIgnoreCase(Mockito.anyString()))
+      .thenReturn(List.of(post));
+
+      List<Post> posts = postRepository.findByBodyContainingIgnoreCase("first post");
+
+      assertNotNull(posts);
+      assertFalse(posts.isEmpty());
+      assertTrue(posts.get(0).getBody().toLowerCase().contains("first post"));
+    }
+
+    @Test
+    public void testSearchByKeyword() {
+      Mockito.lenient().when(postRepository.searchByKeyword(Mockito.anyString()))
+      .thenReturn(List.of(post));
+
+      List<Post> posts = postRepository.searchByKeyword("first");
+
+      assertNotNull(posts);
+      assertFalse(posts.isEmpty());
+      assertTrue(posts.get(0).getTitle().toLowerCase().contains("first") || posts.get(0).getBody().toLowerCase().contains("first"));
     }
 }

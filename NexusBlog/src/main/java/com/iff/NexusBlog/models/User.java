@@ -18,7 +18,7 @@ public class User {
     private boolean active;
 
     @Column(nullable = false) 
-    private String name;
+    private String firstName;
     
     @Column(nullable = false) 
     private String lastName;
@@ -66,12 +66,12 @@ public class User {
         this.active = active;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String name) {
+        this.firstName = name;
     }
 
     public String getLastName() {
