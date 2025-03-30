@@ -2,6 +2,9 @@ package com.iff.NexusBlog.apirest;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iff.NexusBlog.models.Category;
+import com.iff.NexusBlog.service.CategoryService;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,24 +23,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/api/categories")
 public class CategoriesApiController {
+
+  private CategoryService categoryService;
+
   @GetMapping
-  public ResponseEntity<List<Map<String, String>>> getCategories(@RequestParam String param) {
-    Map<String, String> comment1 = new HashMap<String, String>() {{
-      put("name", "sports");
-      put("id", "23");
-    }};
-
-    Map<String, String> comment2 = new HashMap<String, String>() {{
-      put("name", "technology");
-      put("id", "23");
-    }};
-
-    List<Map<String, String>> comments = new ArrayList<>();
-
-    comments.add(comment1);
-    comments.add(comment2);
-    
-    return ResponseEntity.ok(comments);
+  public List<Category> getCategories(@RequestParam String param) {
+    return this.categoryService.getAll();
   }
   
   @GetMapping("/author/{id}")
