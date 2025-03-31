@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "posts")
@@ -29,9 +30,11 @@ public class Post {
   @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Comment> comments;
 
+  @Min(value = 3, message = "O título do Post deve possuir no mínimo 3 caracteres.")
   @Column(nullable = false)
   private String title;
   
+  @Min(value = 5, message = "O corpo do Post deve possuir no mínimo 5 caracteres.")
   @Column(nullable = false)
   private String body;
 

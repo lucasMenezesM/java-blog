@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "categories")
@@ -12,9 +14,11 @@ public class Category {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Min(value = 3, message = "O nome da Categoria deve possuir no mínimo 3 caracteres.")
   @Column(nullable = false)
   private String name;
 
+  @NotBlank(message = "O nome da Categoria não pode estar vazio.")
   @ManyToMany(mappedBy = "categories")
   private Set<Post> posts = new HashSet<>();
 

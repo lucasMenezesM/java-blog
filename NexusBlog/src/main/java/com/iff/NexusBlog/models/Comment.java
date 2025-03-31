@@ -2,6 +2,7 @@ package com.iff.NexusBlog.models;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "comments")
@@ -18,6 +19,7 @@ public class Comment {
   @JoinColumn(name = "post_id", nullable = false)
   private Post post;
 
+  @NotBlank(message = "O conteúdo do comentário não pode estar vazio.")
   @Column(nullable = false)
   private String content;
 

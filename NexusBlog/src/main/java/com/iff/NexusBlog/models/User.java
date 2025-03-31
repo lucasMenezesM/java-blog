@@ -4,6 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -17,9 +21,11 @@ public class User {
     @Column(nullable = false) 
     private boolean active;
 
+    @NotBlank(message = "O primeiro nome não pode estar vazio.")
     @Column(nullable = false) 
     private String firstName;
     
+    @NotBlank(message = "O sobrenome nome não pode estar vazio.")
     @Column(nullable = false) 
     private String lastName;
 
@@ -32,15 +38,19 @@ public class User {
     @Column() 
     private String bio;
 
+    @NotBlank(message = "O data de nascimento não pode estar vazio.")
+    @Past(message = "A data de nascimento deve estar no passado")
     @Column(nullable = false) 
     private LocalDate birthday;
 
     @Column(nullable = false) 
     private LocalDate lastActivity;
 
+    @Email(message = "Formato de e-mail inválido")
     @Column(nullable = false, unique = true)
     private String email;
     
+    @Min(value= 6, message = "A senha deve possuir no mínimo 6 caracteres")
     @Column(nullable = false)
     private String password;
     
