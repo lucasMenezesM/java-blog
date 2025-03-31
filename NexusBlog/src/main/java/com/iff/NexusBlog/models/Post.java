@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "posts")
@@ -29,9 +30,11 @@ public class Post {
   @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Comment> comments;
 
+  @Min(value = 3, message = "O título do Post deve possuir no mínimo 3 caracteres.")
   @Column(nullable = false)
   private String title;
   
+  @Min(value = 5, message = "O corpo do Post deve possuir no mínimo 5 caracteres.")
   @Column(nullable = false)
   private String body;
 
@@ -40,4 +43,79 @@ public class Post {
 
   @Column(nullable = false) 
   private LocalDate updatedAt;
+
+  public Post(User user, Set<Category> categories, String title, String body) {
+    this.user = user;
+    this.categories = categories != null ? null : categories;
+    this.title = title;
+    this.body = body;
+    this.createdAt = LocalDate.now();
+    this.updatedAt = LocalDate.now();
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public Set<Category> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(Set<Category> categories) {
+    this.categories = categories;
+  }
+
+  public List<Comment> getComments() {
+    return comments;
+  }
+
+  public void setComments(List<Comment> comments) {
+    this.comments = comments;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getBody() {
+    return body;
+  }
+
+  public void setBody(String body) {
+    this.body = body;
+  }
+
+  public LocalDate getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDate createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public LocalDate getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(LocalDate updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  
 }
