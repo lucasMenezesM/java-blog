@@ -3,10 +3,14 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+
+// @JsonIdentityInfo(
+//   generator = ObjectIdGenerators.PropertyGenerator.class,
+//   property = "id"
+// )
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -14,12 +18,12 @@ public class Category {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Min(value = 3, message = "O nome da Categoria deve possuir no mínimo 3 caracteres.")
+  @Size(min = 3, message = "O nome da Categoria deve possuir no mínimo 3 caracteres.")
   @Column(nullable = false)
   private String name;
 
-  @NotBlank(message = "O nome da Categoria não pode estar vazio.")
   @ManyToMany(mappedBy = "categories")
+  // @JsonBackReference("post-category")
   private Set<Post> posts = new HashSet<>();
 
   @Column(nullable = false) 

@@ -12,6 +12,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   List<Post> findByTitleContainingIgnoreCase(String title);
   List<Post> findByBodyContainingIgnoreCase(String body);
 
+  @Query("SELECT p.user FROM Post p WHERE p.id = :postId")
+  Object getUserByPostId(@Param("postId") Long postId);
+
+  @Query("SELECT p FROM Post p WHERE p.user.id = :userId")
+  List<Post> getPostsByUserId(@Param("userId") Long userId);
+
   @Query("SELECT p FROM Post p WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(p.body) LIKE LOWER(CONCAT('%', :keyword, '%'))")
   List<Post> searchByKeyword(@Param("keyword") String keyword);
 

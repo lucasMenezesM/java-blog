@@ -5,10 +5,14 @@ import java.util.List;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 
+// @JsonIdentityInfo(
+//   generator = ObjectIdGenerators.PropertyGenerator.class,
+//   property = "id"
+// )
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
@@ -30,15 +34,16 @@ public class User {
     private String lastName;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    // @JsonManagedReference("user-post")
     private List<Post> posts;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    // @JsonManagedReference("user-comment")
     private List<Comment> comments;
 
     @Column() 
     private String bio;
 
-    @NotBlank(message = "O data de nascimento não pode estar vazio.")
     @Past(message = "A data de nascimento deve estar no passado")
     @Column(nullable = false) 
     private LocalDate birthday;
@@ -50,7 +55,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
     
-    @Min(value= 6, message = "A senha deve possuir no mínimo 6 caracteres")
+    @Size(min= 6, message = "A senha deve possuir no mínimo 6 caracteres")
     @Column(nullable = false)
     private String password;
     
@@ -80,8 +85,8 @@ public class User {
         return firstName;
     }
 
-    public void setFirstName(String name) {
-        this.firstName = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +38,7 @@ public class PostServiceTest {
     @InjectMocks
     private PostService postService;
 
-    @InjectMocks
+    @Mock
     private UserService userService;
 
     private User user;
@@ -88,7 +87,7 @@ public class PostServiceTest {
 
     @Test
     public void testCreatePost() {
-      Post savedPost = postService.create(post);
+      Post savedPost = postService.create(post, 1L);
 
       assertNotNull(savedPost);
       assertEquals("First Post", savedPost.getTitle());
@@ -99,7 +98,7 @@ public class PostServiceTest {
       Long postId = 1L;
       postService.delete(postId);
 
-      // 🔍 Verificando se o método correto foi chamado
+      // Verificando se o método correto foi chamado
       Mockito.verify(postRepository, Mockito.times(1)).delete(post);
     }
 

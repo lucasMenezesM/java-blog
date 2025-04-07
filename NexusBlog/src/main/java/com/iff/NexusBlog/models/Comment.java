@@ -4,6 +4,10 @@ import java.time.LocalDate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+// @JsonIdentityInfo(
+//   generator = ObjectIdGenerators.PropertyGenerator.class,
+//   property = "id"
+// )
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -13,10 +17,12 @@ public class Comment {
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
+  // @JsonBackReference("user-comment")
   private User user;
 
   @ManyToOne
   @JoinColumn(name = "post_id", nullable = false)
+  // @JsonBackReference("post-comment")
   private Post post;
 
   @NotBlank(message = "O conteúdo do comentário não pode estar vazio.")

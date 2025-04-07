@@ -5,9 +5,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+
+// @JsonIdentityInfo(
+//   generator = ObjectIdGenerators.PropertyGenerator.class,
+//   property = "id"
+// )
 @Entity
 @Table(name = "posts")
 public class Post {
@@ -17,32 +22,38 @@ public class Post {
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
+  // @JsonBackReference("user-post")
   private User user;
 
   @ManyToMany
-    @JoinTable(
-        name = "posts_categories",
-        joinColumns = @JoinColumn(name = "post_id"),
-        inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private Set<Category> categories = new HashSet<>();
+  @JoinTable(
+      name = "posts_categories",
+      joinColumns = @JoinColumn(name = "post_id"),
+      inverseJoinColumns = @JoinColumn(name = "category_id")
+  )
+  // @JsonManagedReference("post-category")
+  private Set<Category> categories = new HashSet<>();
 
   @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+  // @JsonManagedReference("post-comment")
   private List<Comment> comments;
 
-  @Min(value = 3, message = "O título do Post deve possuir no mínimo 3 caracteres.")
+  @Size(min = 3, message = "O título do Post deve possuir no mínimo 3 caracteres.")
   @Column(nullable = false)
   private String title;
   
-  @Min(value = 5, message = "O corpo do Post deve possuir no mínimo 5 caracteres.")
+  @Size(min = 5, message = "O corpo do Post deve possuir no mínimo 5 caracteres.")
   @Column(nullable = false)
   private String body;
 
-  @Column(nullable = false) 
+  @Column() 
   private LocalDate createdAt;
 
-  @Column(nullable = false) 
+  @Column() 
   private LocalDate updatedAt;
+
+  public Post(){
+  }
 
   public Post(User user, Set<Category> categories, String title, String body) {
     this.user = user;
