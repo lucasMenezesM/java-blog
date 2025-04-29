@@ -1,10 +1,14 @@
 package com.iff.NexusBlog.service;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.iff.NexusBlog.models.Category;
 
 import com.iff.NexusBlog.repository.CategoryRepository;
 
+@Service
 public class CategoryService {
   private final CategoryRepository categoryRepository;
 
@@ -22,6 +26,9 @@ public class CategoryService {
   }
 
   public Category create(Category category) {
+    category.setCreatedAt(java.time.LocalDate.now());
+    category.setUpdatedAt(java.time.LocalDate.now());
+    
     return this.categoryRepository.save(category);
   }
 

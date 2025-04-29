@@ -3,14 +3,28 @@ package com.iff.NexusBlog.apirest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
+import com.iff.NexusBlog.dto.PostDTO;
+import com.iff.NexusBlog.models.Post;
+import com.iff.NexusBlog.repository.CategoryRepository;
+import com.iff.NexusBlog.repository.PostRepository;
+import com.iff.NexusBlog.repository.UserRepository;
+import com.iff.NexusBlog.response.MessageResponse;
+import com.iff.NexusBlog.service.PostService;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,81 +33,124 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/posts")
 public class PostsApiController {
 
-  @GetMapping
-  public ResponseEntity<List<Map<String,String>>> getPosts() {
-    List<Map<String,String>> lista = new ArrayList<>();
+  @Autowired
+  PostService postService;
 
-    Map<String, String> post1 = new HashMap<>();
-    post1.put("id", "23");
-    post1.put("author", "lucas");
-    post1.put("content", "post content");
+  @Autowired
+  UserRepository userRepository;
+  
+  @Autowired
+  CategoryRepository categoryRepository;
+  
+  @Autowired
+  PostRepository postRepository;
 
-    lista.add(post1);
+  @GetMapping()
+  public ResponseEntity<CollectionModel<EntityModel<PostDTO>>> getPosts() {
+    List<Post> posts = postService.getAll();
 
-    Map<String, String> post2 = new HashMap<>();
-    post2.put("id", "45");
-    post2.put("author", "Robert");
-    post2.put("content", "post2 content");
+    List<EntityModel<PostDTO>> postModels = posts.stream()
+        .map(post -> {
+          PostDTO dto = new PostDTO(post);
+          return EntityModel.of(dto,
+              linkTo(methodOn(PostsApiController.class).getPostById(post.getId())).withSelfRel(),
+              linkTo(methodOn(PostsApiController.class).getUserByPost(post.getUser().getId())).withRel("author-posts")
+          );
+        })
+        .toList();
 
-    lista.add(post2);
+    CollectionModel<EntityModel<PostDTO>> collectionModel = CollectionModel.of(postModels);
+    collectionModel.add(linkTo(methodOn(PostsApiController.class).getPosts()).withSelfRel());
 
-    return ResponseEntity.ok(lista);
+    return ResponseEntity.ok(collectionModel);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Map<String, String>> getPostById(@PathVariable String id) {
-    Map<String, String> post = new HashMap<>();
-    post.put("id", id);
-    post.put("author", "lucas");
-    post.put("content", "post content");
+  public ResponseEntity<EntityModel<PostDTO>> getPostById(@PathVariable Long id) {
+    Post post = postService.getById(id);
+  PostDTO dto = new PostDTO(post);
 
-    return ResponseEntity.ok(post);
+  EntityModel<PostDTO> postModel = EntityModel.of(dto,
+      linkTo(methodOn(PostsApiController.class).getPostById(id)).withSelfRel(),
+      linkTo(methodOn(PostsApiController.class).getUserByPost(post.getUser().getId())).withRel("author-posts"),
+      linkTo(methodOn(PostsApiController.class).getPosts()).withRel("all-posts")
+  );
+
+  return ResponseEntity.ok(postModel);
   }
   
   @GetMapping("/author/{id}")
-  public ResponseEntity<Map<String, String>> getPostByAuthorId(@PathVariable String id) {
-    Map<String, String> post = new HashMap<>();
-    post.put("id", "author id");
-    post.put("author", "Author with id "+id);
-    post.put("content", "post content");
+  public ResponseEntity<CollectionModel<EntityModel<PostDTO>>> getUserByPost(@PathVariable Long id) {
+    List<Post> posts = postService.getPostsByUserId(id);
 
-    return ResponseEntity.ok(post);
+    List<EntityModel<PostDTO>> postModels = posts.stream()
+        .map(post -> {
+          PostDTO dto = new PostDTO(post);
+          return EntityModel.of(dto,
+              linkTo(methodOn(PostsApiController.class).getPostById(post.getId())).withRel("self"),
+              linkTo(methodOn(PostsApiController.class).getPosts()).withRel("all-posts")
+          );
+        })
+        .toList();
+  
+    CollectionModel<EntityModel<PostDTO>> collectionModel = CollectionModel.of(postModels);
+    collectionModel.add(linkTo(methodOn(PostsApiController.class).getUserByPost(id)).withSelfRel());
+  
+    return ResponseEntity.ok(collectionModel);
   }
   
   @PostMapping
-  public ResponseEntity<Map<String, String>> CreatePost(@RequestBody Map<String, Object> post) {
-    String content = (String) post.get("content");
-    String author = (String) post.get("author");
-    
-    Map<String, String> newPost = new HashMap<>();
-
-    newPost.put("content", content);
-    newPost.put("author", author);
-    newPost.put("id", "324");
-    
-    return ResponseEntity.ok(newPost);
+  public ResponseEntity<EntityModel<PostDTO>> CreatePost(@RequestBody PostDTO postData) {
+    Post newPost = new Post();
+    newPost.setTitle(postData.getTitle());
+    newPost.setBody(postData.getBody());
+  
+    Post createdPost = postService.create(newPost, postData.getUser_id());
+  
+    PostDTO dto = new PostDTO(createdPost);
+  
+    EntityModel<PostDTO> postModel = EntityModel.of(dto,
+        linkTo(methodOn(PostsApiController.class).getPostById(createdPost.getId())).withRel("self"),
+        linkTo(methodOn(PostsApiController.class).getPosts()).withRel("all-posts"),
+        linkTo(methodOn(PostsApiController.class).getUserByPost(createdPost.getUser().getId())).withRel("author-posts")
+    );
+  
+    return ResponseEntity
+        .created(linkTo(methodOn(PostsApiController.class).getPostById(createdPost.getId())).toUri())
+        .body(postModel);
   }
 
-  @PostMapping("/{id}")
-  public ResponseEntity<Map<String, String>> updatePost(@PathVariable String id, @RequestBody Map<String, Object> post) {
-    String content = (String) post.get("content");
-    String author = (String) post.get("author");
-    
-    Map<String, String> updatedPost = new HashMap<String, String>() {{
-      put("content", content);
-      put("author", author);
-      put("id", id);
-    }};
+  @PatchMapping(value = "/{id}", consumes = "application/json")
+  public ResponseEntity<EntityModel<PostDTO>> updatePost(@PathVariable Long id, @RequestBody PostDTO postData) {
+    Post postToUpdate = postService.getById(id);
+    postToUpdate.setTitle(postData.getTitle());
+    postToUpdate.setBody(postData.getBody());
 
-    updatedPost.put("content", content);
-    updatedPost.put("author", author);
-    
-    return ResponseEntity.ok(updatedPost);
+    Post updatedPost = postService.update(postToUpdate);
+
+    PostDTO dto = new PostDTO(updatedPost);
+
+    EntityModel<PostDTO> postModel = EntityModel.of(dto,
+        linkTo(methodOn(PostsApiController.class).getPostById(id)).withSelfRel(),
+        linkTo(methodOn(PostsApiController.class).getUserByPost(updatedPost.getUser().getId())).withRel("author-posts"),
+        linkTo(methodOn(PostsApiController.class).getPosts()).withRel("all-posts")
+    );
+
+    return ResponseEntity.ok(postModel);
+
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<String> destroyPost(@PathVariable String id, @RequestBody Map<String, Object> post){
-    return ResponseEntity.ok("Deleted");
+  public ResponseEntity<EntityModel<MessageResponse>> destroyPost(@PathVariable Long id) {
+    postService.delete(id);
+
+    MessageResponse message = new MessageResponse("Post Successfully deleted");
+
+    EntityModel<MessageResponse> response = EntityModel.of(message,
+        linkTo(methodOn(PostsApiController.class).getPosts()).withRel("all-posts")
+    );
+
+    return ResponseEntity.ok(response);
   }
   
 }
