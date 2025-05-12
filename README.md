@@ -1,6 +1,6 @@
 # **Nexus Blog**
 
-Um projeto de blog simples desenvolvido com **Java** e **Spring Boot**, utilizando **HTML**, **CSS**, **Bootstrap** para o front-end e **MySQL** como banco de dados. Este projeto permite criar, visualizar, editar e excluir postagens de blog.
+Um projeto de blog simples desenvolvido com **Java** e **Spring Boot**, utilizando **HTML**, **CSS**, **Tailwind** para o front-end e **MySQL** como banco de dados. Este projeto permite criar, visualizar, editar e excluir postagens de blog.
 
 ---
 
@@ -19,7 +19,7 @@ Um projeto de blog simples desenvolvido com **Java** e **Spring Boot**, utilizan
 
 ## **Sobre o Projeto**
 
-O Nexus Blog é um sistema básico para gerenciamento de postagens. Ele foi criado para explorar o desenvolvimento full stack utilizando **Spring Boot** no back-end e um front-end moderno com **HTML**, **CSS** e **Bootstrap**.
+O Nexus Blog é um sistema básico para gerenciamento de postagens. Ele foi criado para explorar o desenvolvimento full stack utilizando **Spring Boot** no back-end e um front-end moderno com **HTML**, **CSS** e **Tailwind CSS**.
 
 ---
 
@@ -35,7 +35,7 @@ O Nexus Blog é um sistema básico para gerenciamento de postagens. Ele foi cria
 ## **Tecnologias Usadas**
 
 - **Java** (Spring Boot)
-- **HTML**, **CSS** e **Bootstrap**
+- **HTML**, **CSS** e **Tailwind**
 - **MySQL**
 - **Thymeleaf** (Motor de templates para o front-end)
 

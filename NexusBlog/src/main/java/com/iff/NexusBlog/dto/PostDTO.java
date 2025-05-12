@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.iff.NexusBlog.models.Post;
+import com.iff.NexusBlog.models.User;
 
 public class PostDTO {
   private Long id;
@@ -14,6 +15,7 @@ public class PostDTO {
   private Set<Long> categories;
   private LocalDate created_at;
   private LocalDate updated_at;
+  private User user;
 
   public PostDTO(){
 
@@ -72,8 +74,11 @@ public class PostDTO {
   public void setUpdated_at(LocalDate updated_at) {
     this.updated_at = updated_at;
   }
+  public User getUser() {
+    return user;
+  }
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-  
-
-  
 }

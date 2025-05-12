@@ -1,0 +1,21 @@
+<th:block th:fragment="leftSideBar">
+  <aside class="w-1/4 hidden md:block">
+    <div class="bg-white rounded-2xl shadow p-6 flex flex-col gap-4 sticky top-4">
+      <a href="/posts/new" class="bg-blue-500 text-white text-center py-2 px-4 rounded-xl hover:bg-blue-600 transition">
+        Create New Post
+      </a>
+      <a href="/users/6" class="text-blue-500 text-center py-2 px-4 rounded-xl hover:bg-blue-100 transition">
+        My Profile
+      </a>
+      <a href="/sign_in" class="text-blue-500 text-center py-2 px-4 rounded-xl hover:bg-blue-100 transition">
+        Sign In
+      </a>
+      <a href="/sign_up" class="text-blue-500 text-center py-2 px-4 rounded-xl hover:bg-blue-100 transition">
+        Sign Up
+      </a>
+      <a href="/logout" class="text-red-500 text-center py-2 px-4 rounded-xl hover:bg-red-100 transition">
+        Log Out
+      </a>
+    </div>
+  </aside>
+</th:block>

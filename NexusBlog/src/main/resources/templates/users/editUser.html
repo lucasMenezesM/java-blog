@@ -1,0 +1,51 @@
+<head th:replace="fragments/shared/header :: header"></head>
+
+<navbar th:replace="fragments/shared/navbar :: navbar"></navbar>
+
+<div class="container mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
+  <h2 class="text-2xl font-bold mb-6">Edit User Information</h2>
+  <form th:action="@{/users/edit/{id}(id=${user.id})}" method="post" class="space-y-4">
+    <div>
+      <label for="firstname" class="block text-sm font-medium text-gray-700">First Name</label>
+      <input type="text" id="firstname" name="firstName"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Enter First Name" required th:value="${user.getFirstName()}">
+    </div>
+    <div>
+      <label for="lastname" class="block text-sm font-medium text-gray-700">Last Name</label>
+      <input type="text" id="lastname" name="lastName"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Enter Last Name" required th:value="${user.getLastName()}">
+    </div>
+    <div>
+      <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+      <input type="email" id="email" name="email"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Enter email" required th:value="${user.getEmail()}">
+    </div>
+    <div>
+      <label for="birthday" class="block text-sm font-medium text-gray-700">Birthday</label>
+      <input type="date" id="birthday" name="birthday"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Enter email" required th:value="${user.getBirthday()}">
+    </div>
+    <div>
+      <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+      <input type="password" id="password" name="password"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Enter new password">
+    </div>
+    <div>
+      <label for="bio" class="block text-sm font-medium text-gray-700">Bio</label>
+      <textarea id="bio" name="bio"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Enter bio" required th:text="${user.getBio()}"></textarea>
+      <div class="flex justify-end">
+        <button type="submit"
+          class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Save
+          Changes</button>
+      </div>
+  </form>
+</div>
+
+<footer th:replace="fragments/shared/footer :: footer"></footer>

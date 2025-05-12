@@ -47,8 +47,8 @@ public class UserService {
     user.setBio(userDetails.getBio());
     user.setEmail(userDetails.getEmail());
     user.setBirthday(userDetails.getBirthday());
-    user.setPassword(userDetails.getPassword());
-    // user.setActive(userDetails.isActive());
+    if (!userDetails.getPassword().isEmpty())
+      user.setPassword(userDetails.getPassword());
 
     user.setUpdatedAt(java.time.LocalDate.now());
 

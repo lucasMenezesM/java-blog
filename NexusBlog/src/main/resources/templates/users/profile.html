@@ -1,0 +1,29 @@
+<head th:replace="fragments/shared/header :: header"></head>
+
+<navbar th:replace="fragments/shared/navbar :: navbar"></navbar>
+
+<div class="container mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
+  <div class="flex items-center space-x-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800" th:text="${user.getFullName()}"></h1>
+    </div>
+  </div>
+  <div class="mt-6">
+    <h2 class="text-xl font-semibold text-gray-800">About</h2>
+    <p class="mt-2 text-gray-600" th:text="${user.getBio()}"></p>
+  </div>
+  <div class="mt-6">
+    <h2 class="text-xl font-semibold text-gray-800">Registered since:</h2>
+    <p class="mt-2 text-gray-600" th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}"></p>
+  </div>
+  <div class="mt-6">
+    <h2 class="text-xl font-semibold text-gray-800">Posts created:</h2>
+    <p class="mt-2 text-gray-600" th:text="${user.getPosts().size()}"></p>
+  </div>
+  <div class="mt-6">
+    <h2 class="text-xl font-semibold text-gray-800">Last activity:</h2>
+    <p class="mt-2 text-gray-600" th:text="${#temporals.format(user.getLastActivity(), 'dd/MM/yyyy')}"></p>
+  </div>
+</div>
+
+<footer th:replace="fragments/shared/footer :: footer"></footer>

@@ -29,7 +29,7 @@ public class PostService {
   }
 
   public List<Post> getAll(){
-    return this.postRepository.findAll();
+    return this.postRepository.findAllByOrderByCreatedAtDesc();
   }
 
   public Post getById(Long id) {
