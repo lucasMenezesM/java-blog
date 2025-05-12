@@ -1,0 +1,32 @@
+<head th:replace="fragments/shared/header :: header"></head>
+
+<navbar th:replace="fragments/shared/navbar :: navbar"></navbar>
+
+<div class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
+    <h1 class="text-2xl font-bold mb-6 text-gray-800">Create New Post</h1>
+    <form action="/posts/new" method="POST" class="space-y-4">
+      <div>
+        <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+        <input type="text" id="title" name="title" required
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+      </div>
+      <div>
+        <label for="body" class="block text-sm font-medium text-gray-700">Content</label>
+        <textarea id="body" name="body" rows="6" required
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+      </div>
+      <div class="flex justify-end">
+        <button type="submit"
+          class="bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          Create Post
+        </button>
+      </div>
+
+      <input type="hidden" name="user_id" th:value="${6}" />
+      <input type="hidden" name="categories" th:value="${1}" />
+    </form>
+  </div>
+</div>
+
+<footer th:replace="fragments/shared/footer :: footer"></footer>

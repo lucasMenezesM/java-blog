@@ -1,0 +1,25 @@
+<head th:replace="fragments/shared/header :: header"></head>
+
+<navbar th:replace="fragments/shared/navbar :: navbar"></navbar>
+
+<div class="container mx-auto mt-10"></div>
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+  <h1 class="text-2xl font-bold mb-6 text-gray-800">Edit Category</h1>
+  <form th:action="@{/categories/edit/{id}(id=${category.id})}" method="POST">
+    <div class="mb-4">
+      <label for="name" class="block text-gray-700 font-medium mb-2">Category Name</label>
+      <input type="text" id="name" name="name"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter category name" required th:value="${category.name}" />
+    </div>
+    <div class="flex justify-end">
+      <button type="submit"
+        class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        Save Changes
+      </button>
+    </div>
+  </form>
+</div>
+</div>
+
+<footer th:replace="fragments/shared/footer :: footer"></footer>

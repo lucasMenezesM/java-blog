@@ -24,6 +24,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -100,7 +101,7 @@ public class PostsApiController {
   }
   
   @PostMapping
-  public ResponseEntity<EntityModel<PostDTO>> CreatePost(@RequestBody PostDTO postData) {
+  public ResponseEntity<EntityModel<PostDTO>> CreatePost(@ModelAttribute PostDTO postData) {
     Post newPost = new Post();
     newPost.setTitle(postData.getTitle());
     newPost.setBody(postData.getBody());

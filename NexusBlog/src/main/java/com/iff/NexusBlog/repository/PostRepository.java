@@ -11,6 +11,7 @@ import com.iff.NexusBlog.models.Post;
 public interface PostRepository extends JpaRepository<Post, Long> {
   List<Post> findByTitleContainingIgnoreCase(String title);
   List<Post> findByBodyContainingIgnoreCase(String body);
+  List<Post> findAllByOrderByCreatedAtDesc();
 
   @Query("SELECT p.user FROM Post p WHERE p.id = :postId")
   Object getUserByPostId(@Param("postId") Long postId);
