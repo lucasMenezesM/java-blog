@@ -1,0 +1,36 @@
+<head th:replace="fragments/shared/header :: header"></head>
+
+<navbar th:replace="fragments/shared/navbar :: navbar"></navbar>
+
+<div class="container mx-auto mt-8">
+  <h1 class="text-3xl font-bold mb-6 text-center">All Users</h1>
+  <div class="overflow-x-auto">
+    <table class="table-auto w-full border-collapse border border-gray-300">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="border border-gray-300 px-4 py-2">ID</th>
+          <th class="border border-gray-300 px-4 py-2">Name</th>
+          <th class="border border-gray-300 px-4 py-2">Email</th>
+          <th class="border border-gray-300 px-4 py-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="user : ${users}" class="hover:bg-gray-100">
+          <td class="border border-gray-300 px-4 py-2" th:text="${user.id}"></td>
+          <td class="border border-gray-300 px-4 py-2" th:text="${user.getFullName()}"></td>
+          <td class="border border-gray-300 px-4 py-2" th:text="${user.email}"></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">
+            <a th:href="@{'/users/edit/' + ${user.id}}" class="text-blue-500 hover:underline">Edit</a> |
+            <a th:href="@{/users/delete/{id}(id=${user.id})}"
+              onclick="return confirm('Are you sure you want to delete this User?');"
+              class="text-red-500 hover:underline">
+              Delete
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<footer th:replace="fragments/shared/footer :: footer"></footer>

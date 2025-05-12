@@ -1,0 +1,25 @@
+<head th:replace="fragments/shared/header :: header"></head>
+
+<navbar th:replace="fragments/shared/navbar :: navbar"></navbar>
+
+<div class="container mx-auto mt-10">
+  <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Create New Category</h1>
+    <form action="/categories" method="POST">
+      <div class="mb-4">
+        <label for="name" class="block text-sm font-medium text-gray-700">Category Name</label>
+        <input type="text" id="name" name="name"
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          placeholder="Enter category name" required />
+      </div>
+      <div class="flex justify-end">
+        <button type="submit"
+          class="px-6 py-2 bg-blue-600 text-white font-medium text-sm rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          Create
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<footer th:replace="fragments/shared/footer :: footer"></footer>
